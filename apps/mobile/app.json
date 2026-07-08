@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Matrimonial Member App",
+    "slug": "matrimonial-member-app",
+    "scheme": "matrimonial",
+    "plugins": ["expo-router"],
+    "orientation": "portrait",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}

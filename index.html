@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Software Requirements Specification for a Community Management Platform." />
+  <title>Community Management Platform | SRS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f8fc;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: #ffffff;
+      --surface-soft: #eef4fb;
+      --line: rgba(27, 79, 140, 0.12);
+      --text: #102033;
+      --muted: #516174;
+      --primary: #1b4f8c;
+      --primary-strong: #123a66;
+      --accent: #3d79b8;
+      --accent-soft: #dceaf7;
+      --mint: #dff3ea;
+      --amber: #fff1d6;
+      --rose: #fde3e3;
+      --shadow: 0 18px 50px rgba(17, 38, 67, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(61, 121, 184, 0.12), transparent 26%),
+        radial-gradient(circle at top right, rgba(27, 79, 140, 0.09), transparent 28%),
+        linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page-shell {
+      position: relative;
+      overflow: clip;
+    }
+
+    .page-shell::before,
+    .page-shell::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(28px);
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-shell::before {
+      top: -160px;
+      left: -140px;
+      background: rgba(61, 121, 184, 0.8);
+    }
+
+    .page-shell::after {
+      right: -120px;
+      top: 140px;
+      background: rgba(27, 79, 140, 0.7);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(248, 251, 255, 0.72);
+      border-bottom: 1px solid rgba(27, 79, 140, 0.08);
+    }
+
+    .topbar-inner,
+    .hero,
+    .layout,
+    .footer {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--primary), var(--accent));
+      box-shadow: 0 10px 28px rgba(27, 79, 140, 0.24);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border-radius: 10px;
+      border: 1.6px solid rgba(255, 255, 255, 0.72);
+    }
+
+    .brand-mark::after {
+      inset: 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 0.96rem;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .topnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .topnav a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+    }
+
+    .topnav a:hover {
+      transform: translateY(-1px);
+      background: rgba(27, 79, 140, 0.08);
+      color: var(--primary-strong);
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 40px 0 24px;
+    }
+
+    .hero-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.85fr);
+      gap: 24px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 250, 255, 0.9));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--primary-strong);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 16px 0 14px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2.2rem, 4vw, 4.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      max-width: 12ch;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+      box-shadow: 0 10px 24px rgba(27, 79, 140, 0.12);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(145deg, var(--primary), var(--accent));
+    }
+
+    .btn-secondary {
+      color: var(--primary-strong);
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(27, 79, 140, 0.14);
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      padding: 8px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-strong);
+      border: 1px solid rgba(27, 79, 140, 0.08);
+      box-shadow: 0 10px 24px rgba(17, 38, 67, 0.05);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-bottom: 8px;
+    }
+
+    .stat strong {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.4rem;
+      line-height: 1;
+      color: var(--primary-strong);
+    }
+
+    .mini-card {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(180deg, rgba(220, 234, 247, 0.88), rgba(255, 255, 255, 0.88));
+      border: 1px solid rgba(27, 79, 140, 0.1);
+    }
+
+    .mini-card h2,
+    .section h2,
+    .section h3,
+    .callout h3,
+    .subtle-title {
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .mini-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(27, 79, 140, 0.1);
+      color: var(--primary-strong);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 24px;
+      padding: 12px 0 52px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      padding: 18px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 14px 34px rgba(17, 38, 67, 0.06);
+    }
+
+    .sidebar .subtle-title {
+      margin: 0 0 14px;
+      font-size: 0.98rem;
+    }
+
+    .sidebar nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 0.93rem;
+      font-weight: 600;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .sidebar a span {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .sidebar a:hover {
+      color: var(--primary-strong);
+      background: rgba(220, 234, 247, 0.72);
+      border-color: rgba(27, 79, 140, 0.08);
+    }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 1.2vw, 1.8rem);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .section p,
+    .section li {
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .section p {
+      margin-top: 0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .info-card {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #ffffff, #f6faff);
+      border: 1px solid rgba(27, 79, 140, 0.08);
+    }
+
+    .info-card strong {
+      display: block;
+      font-size: 0.84rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--primary-strong);
+      margin-bottom: 8px;
+    }
+
+    .info-card span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .callout {
+      padding: 18px;
+      margin-top: 16px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(220, 234, 247, 0.58), rgba(255, 255, 255, 0.92));
+      border: 1px solid rgba(27, 79, 140, 0.08);
+    }
+
+    .callout h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+
+    .callout ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(27, 79, 140, 0.1);
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+    }
+
+    th,
+    td {
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(27, 79, 140, 0.08);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(220, 234, 247, 0.72);
+      color: var(--primary-strong);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(27, 79, 140, 0.1);
+      color: var(--primary-strong);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .swatch {
+      min-height: 92px;
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid rgba(17, 38, 67, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 6px;
+      box-shadow: 0 14px 24px rgba(17, 38, 67, 0.06);
+    }
+
+    .swatch strong {
+      font-size: 0.9rem;
+    }
+
+    .swatch span {
+      font-size: 0.8rem;
+      opacity: 0.88;
+    }
+
+    .swatch.primary { background: linear-gradient(145deg, #0f3a68, #1b4f8c); color: white; }
+    .swatch.accent { background: linear-gradient(145deg, #dceaf7, #ffffff); color: var(--primary-strong); }
+    .swatch.mint { background: linear-gradient(145deg, #dff3ea, #ffffff); color: #1f5c41; }
+    .swatch.amber { background: linear-gradient(145deg, #fff1d6, #ffffff); color: #6f5200; }
+
+    .footer {
+      position: relative;
+      z-index: 1;
+      padding: 0 0 28px;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .footer-panel {
+      padding: 18px 22px;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(27, 79, 140, 0.1);
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 12px 28px rgba(17, 38, 67, 0.05);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(27, 79, 140, 0.08);
+      color: var(--primary-strong);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.72;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-panel,
+      .layout,
+      .info-grid,
+      .palette,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topnav {
+        justify-content: flex-start;
+      }
+
+      .hero,
+      .layout {
+        width: min(calc(100% - 20px), var(--max));
+      }
+
+      .hero-panel,
+      .section,
+      .sidebar {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" aria-label="Community Management Platform">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div class="brand-copy">
+            <strong>Community Management Platform</strong>
+            <span>SRS for web, admin, and mobile surfaces</span>
+          </div>
+        </div>
+        <nav class="topnav" aria-label="Page sections">
+          <a href="#overview">Overview</a>
+          <a href="#features">Features</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#ux">UI/UX</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="hero-panel">
+          <div>
+            <span class="eyebrow">Software Requirements Specification</span>
+            <h1>A calm, premium system brief for a community platform.</h1>
+            <p>
+              This presentation turns the raw specification into a cleaner, more refined document view with a soft blue-white palette, structured sections, and readable tables for product, design, and delivery teams.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#features">Explore Requirements</a>
+              <a class="btn btn-secondary" href="#palette">View Color Direction</a>
+            </div>
+            <div class="pill-row" aria-label="Document metadata">
+              <span class="pill">Version 1.0</span>
+              <span class="pill">Prepared July 2026</span>
+              <span class="pill">Draft for Review</span>
+              <span class="pill">Public Website + Admin + Mobile</span>
+            </div>
+          </div>
+
+          <div class="hero-meta">
+            <div class="stat-grid">
+              <div class="stat">
+                <span>Core modules</span>
+                <strong>9</strong>
+              </div>
+              <div class="stat">
+                <span>Clients</span>
+                <strong>3</strong>
+              </div>
+              <div class="stat">
+                <span>Stack direction</span>
+                <strong>Modern</strong>
+              </div>
+              <div class="stat">
+                <span>Theme</span>
+                <strong>Blue / White</strong>
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <h2>Design intent</h2>
+              <p>
+                Keep the interface visually soft and balanced: clear whitespace, gentle shadows, restrained accents, and a premium feel without heavy gradients or loud contrast.
+              </p>
+              <div class="tag-list">
+                <span class="tag">Readable</span>
+                <span class="tag">Responsive</span>
+                <span class="tag">Formal</span>
+                <span class="tag">Modern</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="layout" aria-label="Document layout">
+        <aside class="sidebar">
+          <h2 class="subtle-title">Contents</h2>
+          <nav>
+            <a href="#snapshot">Document snapshot <span>01</span></a>
+            <a href="#description">Overall description <span>02</span></a>
+            <a href="#features">System features <span>03</span></a>
+            <a href="#interfaces">Interfaces <span>04</span></a>
+            <a href="#nonfunctional">Non-functional requirements <span>05</span></a>
+            <a href="#architecture">Architecture <span>06</span></a>
+            <a href="#ux">UI/UX guidelines <span>07</span></a>
+            <a href="#ideas">Additional ideas <span>08</span></a>
+            <a href="#assumptions">Assumptions <span>09</span></a>
+            <a href="#appendix">Appendix <span>10</span></a>
+          </nav>
+        </aside>
+
+        <div class="content">
+          <section class="section" id="snapshot">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Document Snapshot</span>
+                <h2>High-level summary</h2>
+              </div>
+            </div>
+            <div class="info-grid">
+              <div class="info-card">
+                <strong>Purpose</strong>
+                <span>Define the functional and non-functional requirements for the platform across all surfaces.</span>
+              </div>
+              <div class="info-card">
+                <strong>Scope</strong>
+                <span>Member management, family records, news, notices, payments, accounting, and matrimony registry.</span>
+              </div>
+              <div class="info-card">
+                <strong>Audience</strong>
+                <span>Sponsors, admins, designers, developers, QA teams, and third-party service vendors.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="description">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 2</span>
+                <h2>Overall description</h2>
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <h3 class="subtle-title">Product perspective</h3>
+                <p>
+                  The system is a new product with three coordinated front ends sharing one backend and one database through a common API layer.
+                </p>
+                <p>
+                  The result is a single source of truth where records created by Admin are immediately visible to members, while notices and payment events flow across all surfaces.
+                </p>
+              </div>
+              <div>
+                <h3 class="subtle-title">Product functions</h3>
+                <ul class="feature-list">
+                  <li>Secure authentication and role-based access control.</li>
+                  <li>Admin dashboard for members, payments, notices, and matrimony activity.</li>
+                  <li>Admin-driven member registration with family detail capture.</li>
+                  <li>News and notice publishing with push delivery.</li>
+                  <li>Payment tracking with confirmations and a lightweight ledger.</li>
+                  <li>Public website with news, gallery, and matrimony listings.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="features">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 3</span>
+                <h2>System features</h2>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.1 Authentication & access management</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-AUTH-01</td><td>Login using registered email and password for Admin and Members</td><td>High</td></tr>
+                    <tr><td>FR-AUTH-02</td><td>Passwords stored using a salted one-way hash</td><td>High</td></tr>
+                    <tr><td>FR-AUTH-03</td><td>Secure, expiring session tokens for API access</td><td>High</td></tr>
+                    <tr><td>FR-AUTH-04</td><td>Role-based access control for Super Admin, Admin, and Member</td><td>High</td></tr>
+                    <tr><td>FR-AUTH-05</td><td>Forgot Password via email reset link</td><td>High</td></tr>
+                    <tr><td>FR-AUTH-06</td><td>Temporary account lock after repeated failed logins</td><td>Medium</td></tr>
+                    <tr><td>FR-AUTH-07</td><td>Audit logging for sensitive Admin actions</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.2 Admin dashboard</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-DASH-01</td><td>Total members, new registrations, and active users</td><td>High</td></tr>
+                    <tr><td>FR-DASH-02</td><td>Recent payments and total collections</td><td>High</td></tr>
+                    <tr><td>FR-DASH-03</td><td>Recently published news/notices and their reach</td><td>Medium</td></tr>
+                    <tr><td>FR-DASH-04</td><td>Matrimony activity such as new registrations and pending approvals</td><td>Medium</td></tr>
+                    <tr><td>FR-DASH-05</td><td>Quick actions like Add Member, Post Notice, and Record Payment</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.3 User registration & management</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-USER-01</td><td>Add a new member with name, contact, email, and initial credentials</td><td>High</td></tr>
+                    <tr><td>FR-USER-02</td><td>Auto-generate temporary password and send via email/SMS</td><td>High</td></tr>
+                    <tr><td>FR-USER-03</td><td>Member can log in and complete or edit profile on mobile app</td><td>High</td></tr>
+                    <tr><td>FR-USER-04</td><td>Edit, deactivate, or delete a member record</td><td>High</td></tr>
+                    <tr><td>FR-USER-05</td><td>Search and filter members by name, area, and status</td><td>Medium</td></tr>
+                    <tr><td>FR-USER-06</td><td>Prevent duplicate registration by email or phone number</td><td>High</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.4 User & family details</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-UDET-01</td><td>Store member personal details such as name, DOB, gender, contact, address, and occupation</td><td>High</td></tr>
+                    <tr><td>FR-UDET-02</td><td>Allow a member to add family members with relationship, name, and DOB</td><td>High</td></tr>
+                    <tr><td>FR-UDET-03</td><td>Display the member's complete payment history</td><td>High</td></tr>
+                    <tr><td>FR-UDET-04</td><td>Admin can view and edit any member's and family details</td><td>High</td></tr>
+                    <tr><td>FR-UDET-05</td><td>Upload profile photo and family photo(s)</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.5 News and other notices</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-NEWS-01</td><td>Create, edit, and delete a news item or notice</td><td>High</td></tr>
+                    <tr><td>FR-NEWS-02</td><td>Push notification to all or targeted members when published</td><td>High</td></tr>
+                    <tr><td>FR-NEWS-03</td><td>Chronological feed of news/notices in the mobile app</td><td>High</td></tr>
+                    <tr><td>FR-NEWS-04</td><td>Public news items also appear on the public website</td><td>Medium</td></tr>
+                    <tr><td>FR-NEWS-05</td><td>Schedule notices for future publishing</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.6 Payments and accounting</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-PAY-01</td><td>Record a payment against a member with amount, date, and purpose</td><td>High</td></tr>
+                    <tr><td>FR-PAY-02</td><td>Integrate with a payment gateway for online payment</td><td>High</td></tr>
+                    <tr><td>FR-PAY-03</td><td>Email confirmation and push notification after successful payment</td><td>High</td></tr>
+                    <tr><td>FR-PAY-04</td><td>Generate a downloadable receipt or invoice per payment</td><td>Medium</td></tr>
+                    <tr><td>FR-PAY-05</td><td>Maintain a basic ledger of income and expenses</td><td>High</td></tr>
+                    <tr><td>FR-PAY-06</td><td>Filter and export payment records by date range or member</td><td>Medium</td></tr>
+                    <tr><td>FR-PAY-07</td><td>Recurring or annual membership dues with reminders</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.7 Matrimony registration</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-MAT-01</td><td>Create a matrimony profile with personal, family, education, and profession details</td><td>High</td></tr>
+                    <tr><td>FR-MAT-02</td><td>Upload photo(s) to the matrimony profile</td><td>High</td></tr>
+                    <tr><td>FR-MAT-03</td><td>Browse and view other matrimony entries within the app</td><td>High</td></tr>
+                    <tr><td>FR-MAT-04</td><td>Search and filter entries by age, gender, location, education, profession, and more</td><td>High</td></tr>
+                    <tr><td>FR-MAT-05</td><td>Require Admin approval before profiles become visible</td><td>High</td></tr>
+                    <tr><td>FR-MAT-06</td><td>Admin can approve, reject, or remove any matrimony entry</td><td>High</td></tr>
+                    <tr><td>FR-MAT-07</td><td>Approved non-sensitive fields appear on the public website</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.8 Public website</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-WEB-01</td><td>Display latest public news and notices</td><td>High</td></tr>
+                    <tr><td>FR-WEB-02</td><td>Display a photo gallery</td><td>High</td></tr>
+                    <tr><td>FR-WEB-03</td><td>Display approved public matrimony entries with basic search</td><td>High</td></tr>
+                    <tr><td>FR-WEB-04</td><td>Include an About Us / contact page</td><td>Medium</td></tr>
+                    <tr><td>FR-WEB-05</td><td>SEO-optimised and mobile responsive</td><td>Medium</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>3.9 Additional suggested modules</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>FR-ADD-01</td><td>Events module for Admin-created events and RSVPs</td><td>Medium</td></tr>
+                    <tr><td>FR-ADD-02</td><td>Donation module with receipts and running totals</td><td>Medium</td></tr>
+                    <tr><td>FR-ADD-03</td><td>Photo/video gallery module with albums</td><td>Medium</td></tr>
+                    <tr><td>FR-ADD-04</td><td>Directory or family-tree view with privacy control</td><td>Low</td></tr>
+                    <tr><td>FR-ADD-05</td><td>In-app support or enquiry chat / ticket system</td><td>Medium</td></tr>
+                    <tr><td>FR-ADD-06</td><td>Multi-language support for regional members</td><td>Low</td></tr>
+                    <tr><td>FR-ADD-07</td><td>Notification centre / inbox inside the app</td><td>Medium</td></tr>
+                    <tr><td>FR-ADD-08</td><td>Analytics module for trends and engagement</td><td>Low</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="interfaces">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 4</span>
+                <h2>External interface requirements</h2>
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <h3 class="subtle-title">User interfaces</h3>
+                <ul class="feature-list">
+                  <li>Consistent white-and-blue theme across all surfaces.</li>
+                  <li>Swipe gestures for matrimony cards, notifications, and summary tabs.</li>
+                  <li>Responsive dashboard layout with a left navigation panel on Admin.</li>
+                  <li>Clean, minimal public website optimized for loading speed.</li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="subtle-title">Software and communication interfaces</h3>
+                <ul class="feature-list">
+                  <li>Payment gateway API such as Razorpay or Stripe.</li>
+                  <li>Email service such as Amazon SES or SendGrid.</li>
+                  <li>Push notifications through Firebase Cloud Messaging.</li>
+                  <li>Optional SMS gateway for OTP and critical alerts.</li>
+                  <li>HTTPS/TLS 1.2+ and versioned REST or GraphQL APIs.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="nonfunctional">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 5</span>
+                <h2>Non-functional requirements</h2>
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <h3 class="subtle-title">Performance and reliability</h3>
+                <ul class="feature-list">
+                  <li>Standard API responses should complete within 2 seconds under normal load.</li>
+                  <li>Public pages should load within 3 seconds on a typical 4G connection.</li>
+                  <li>Target uptime of 99.5% for backend services.</li>
+                  <li>Daily automated database backups with restore procedure.</li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="subtle-title">Security and compliance</h3>
+                <ul class="feature-list">
+                  <li>Sensitive data must be encrypted at rest and in transit.</li>
+                  <li>Role-based access control must restrict Admin-only actions.</li>
+                  <li>Payment card data must never be stored on platform servers.</li>
+                  <li>Personal data handling must follow applicable data-protection principles.</li>
+                  <li>Payment processing must use a PCI-DSS compliant gateway.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="architecture">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 6</span>
+                <h2>System architecture and technology recommendation</h2>
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <h3 class="subtle-title">High-level architecture</h3>
+                <p>
+                  One backend service exposes a versioned API consumed by three clients: the Admin web app, the public website, and the mobile app. A single relational database acts as the source of truth.
+                </p>
+                <p>
+                  Push and email notifications are triggered by backend events such as new notices, payment success, and matrimony approval.
+                </p>
+              </div>
+              <div>
+                <h3 class="subtle-title">Recommended stack</h3>
+                <ul class="feature-list">
+                  <li>Backend: Node.js with NestJS and TypeScript.</li>
+                  <li>Database: PostgreSQL.</li>
+                  <li>Admin Web App: React with TypeScript and Tailwind CSS.</li>
+                  <li>Public Website: Next.js.</li>
+                  <li>Mobile App: Flutter.</li>
+                  <li>Infrastructure: AWS or equivalent on GCP/Azure.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="ux">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 7</span>
+                <h2>UI/UX guidelines</h2>
+              </div>
+            </div>
+
+            <div class="palette" id="palette">
+              <div class="swatch primary"><strong>Primary Blue</strong><span>#1B4F8C</span></div>
+              <div class="swatch accent"><strong>Soft Blue</strong><span>#DCEAF7</span></div>
+              <div class="swatch mint"><strong>Success Mint</strong><span>calm confirmations</span></div>
+              <div class="swatch amber"><strong>Warm Amber</strong><span>light alerts only</span></div>
+            </div>
+
+            <div class="two-col" style="margin-top: 16px;">
+              <div>
+                <h3 class="subtle-title">Interaction style</h3>
+                <ul class="feature-list">
+                  <li>Matrimony browsing should use card-stack swipe interactions.</li>
+                  <li>Notification lists should support swipe-to-dismiss or mark-as-read.</li>
+                  <li>Mobile home views should allow horizontal swipes between summary tabs.</li>
+                  <li>All list screens should support pull-to-refresh.</li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="subtle-title">Layout principles</h3>
+                <ul class="feature-list">
+                  <li>Card-based components with soft shadows and rounded corners.</li>
+                  <li>Bottom tab navigation on mobile.</li>
+                  <li>Consistent typography scale and generous spacing.</li>
+                  <li>Optional dark mode toggle for accessibility.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="ideas">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 8</span>
+                <h2>Additional recommended ideas</h2>
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <ol class="feature-list">
+                  <li>Bulk member import via CSV or Excel.</li>
+                  <li>Events and RSVP module.</li>
+                  <li>Donation module with receipts and totals.</li>
+                  <li>Notification centre inside the mobile app.</li>
+                  <li>Membership ID card with QR code.</li>
+                  <li>Outstanding-dues report with reminders.</li>
+                </ol>
+              </div>
+              <div>
+                <ol class="feature-list" start="7">
+                  <li>Report and block feature for matrimony profiles.</li>
+                  <li>Multi-language support.</li>
+                  <li>Family-tree or directory view with privacy control.</li>
+                  <li>Analytics dashboard for committee reporting.</li>
+                  <li>Biometric login and optional two-factor authentication.</li>
+                  <li>In-app support or enquiry chat.</li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="assumptions">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 9</span>
+                <h2>Assumptions and constraints</h2>
+              </div>
+            </div>
+            <ul class="feature-list">
+              <li>Final scope, module priority, and timeline will be confirmed before development begins.</li>
+              <li>Branding assets and exact content will be supplied by the client.</li>
+              <li>Costs for third-party services are billed separately by those providers.</li>
+              <li>The document will be revised as requirements are refined during design workshops.</li>
+            </ul>
+          </section>
+
+          <section class="section" id="appendix">
+            <div class="section-head">
+              <div>
+                <span class="kicker">Section 10</span>
+                <h2>Appendix</h2>
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <h3 class="subtle-title">Glossary</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr><th>Term</th><th>Meaning</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Module</td><td>A distinct functional area of the system</td></tr>
+                      <tr><td>Ledger</td><td>A running record of income and expenses</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div>
+                <h3 class="subtle-title">Revision history</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr><th>Version</th><th>Notes</th><th>Date</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>v1.0</td><td>Initial draft covering all modules and recommended enhancements</td><td>July 2026</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-panel">
+        This HTML version is styled to feel premium and readable without overusing color, while still keeping the blue identity strong and calm.
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
